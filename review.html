@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Review Workflow - Everyday Upgrade Kami</title>
+<style>body{max-width:640px;margin:20px auto;padding:0 20px;background:#fff;color:#000;font:16px/1.5 Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}a{color:#000}h1{font-size:26px;margin:8px 0}h2{font-size:20px;margin:8px 0}p,ul{margin:6px 0}.note{border:1px solid #000;padding:6px 10px;font-size:14px}.box{border:1px solid #000;padding:10px 14px;margin:10px 0}.row{display:flex;gap:16px;align-items:flex-start}img{height:230px;border:1px solid #000}button,select{font:inherit;padding:6px 14px;border:1px solid #000;background:#fff;color:#000;cursor:pointer}button.main{background:#000;color:#fff}button:disabled{opacity:.4;cursor:default}section{display:none}</style>
+</head>
+<body>
+<h1>Everyday Upgrade Kami: review workflow</h1>
+<p class="note">Demo of our internal review workflow, made for TikTok app review. Not a TikTok page and not affiliated with TikTok. No real account is used on this page.</p>
+
+<section id="connect">
+<h2>Step 1 of 4: Connect account</h2>
+<p>Only the store&rsquo;s own TikTok business account (@shopeverydayupgrade) is ever connected.</p>
+<button class="main" onclick="go('auth')">Connect TikTok account</button>
+</section>
+
+<section id="auth">
+<h2>Step 2 of 4: TikTok Login Kit authorization</h2>
+<div class="box">
+<p>Everyday Upgrade Kami asks to:</p>
+<ul>
+<li><b>user.info.basic</b>: confirm which account is connected</li>
+<li><b>video.upload</b>: send our own video files to that account</li>
+<li><b>video.publish</b>: publish our own approved videos on that account</li>
+</ul>
+<p>The real authorization screen is shown by TikTok. This page only describes it.</p>
+</div>
+<button class="main" onclick="go('queue')">Authorize</button> <button onclick="go('connect')">Cancel</button>
+</section>
+
+<section id="queue">
+<h2>Step 3 of 4: Post queue (human review)</h2>
+<p>Connected account: @shopeverydayupgrade &middot; Pending review: 1</p>
+<div class="box row">
+<img src="review_sample.jpg" alt="Sample video preview">
+<div>
+<p><b>Caption</b></p>
+<p>Entryway bench with two open shelves for shoes. Tidy entryway, easy mornings. #entryway #homeorganization</p>
+<p><label>Privacy setting (reviewer chooses): <select id="priv" onchange="check()"><option value="">Select...</option><option value="public">Public</option><option value="friends">Friends</option><option value="private">Only me</option></select></label></p>
+<p><button class="main" id="ok" onclick="go('result')">Approve &amp; publish</button> <button onclick="go('rejected')">Reject</button></p>
+</div>
+</div>
+</section>
+
+<section id="result">
+<h2>Step 4 of 4: Result</h2>
+<div class="box"><p><b>Published to @shopeverydayupgrade</b> (privacy setting chosen by reviewer: <span class="pv"></span>)</p></div>
+<button onclick="go('queue')">Back to queue</button>
+</section>
+
+<section id="rejected">
+<h2>Step 4 of 4: Result</h2>
+<div class="box"><p><b>Rejected.</b> Nothing was sent to TikTok.</p></div>
+<button onclick="go('queue')">Back to queue</button>
+</section>
+
+<p><a href="index.html">Everyday Upgrade Kami</a> &middot; <a href="privacy.html">Privacy Policy</a> &middot; <a href="terms.html">Terms of Service</a></p>
+<script>
+var names={public:'Public',friends:'Friends',private:'Only me'};
+function go(s){location.hash=s}
+function check(){document.getElementById('ok').disabled=!document.getElementById('priv').value}
+function show(){
+var q=location.hash.slice(1).split('&'),s=q[0]||'connect',p=(q[1]||'').replace('p=','');
+if(!document.getElementById(s))s='connect';
+if(p)document.getElementById('priv').value=p;
+check();
+document.querySelector('.pv').textContent=names[document.getElementById('priv').value]||'not set';
+var a=document.getElementsByTagName('section');
+for(var i=0;i<a.length;i++)a[i].style.display=a[i].id==s?'block':'none';
+}
+window.onhashchange=show;show();
+</script>
+</body>
+</html>
